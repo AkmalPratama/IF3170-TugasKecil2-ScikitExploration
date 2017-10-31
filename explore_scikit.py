@@ -41,7 +41,27 @@ plot_confusion_matrix(cnf_matrix, classes=class_names, normalize=True,
 plt.show()
 
 
-### 10-fold
+### kNN 10-fold cross validation
+print("\n")
+print("kNN 90% train, 10% test")
+print("=======================")
+kf = KFold(n_splits = 10, shuffle = False)
+print(kf)
+i = 1
+temp = 0
+for train_index, test_index in kf.split(iris.data):
+    print("Fold ", i)
+    print("TRAIN :", train_index, "\nTEST :", test_index)
+    x_train = iris.data[train_index]
+    x_test = iris.data[test_index]
+    y_train = iris.target[train_index]
+    y_test = iris.target[test_index]
+    i += 1
+    y_pred = knn.fit(x_train, y_train).predict(x_test)
+    print("Number of mislabeled points out of a total %d points : %d" % (len(x_test), (y_test != y_pred).sum()))
+    temp += (y_test != y_pred).sum()
+print("Sum of mislabeled points : %d" % temp)
+print("Mean of mislabeled points : %.4f" % float(temp/10))
 
 # MLP
 ### Full training
